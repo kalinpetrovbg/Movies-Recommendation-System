@@ -9,7 +9,7 @@ A FastAPI-based movie recommendation system under active development. The goal o
 
 ### Endpoints
 1. :white_check_mark: `/popularity` - Provides popularity-based movie recommendations.
-2. `/collaborative` - Collaborative filtering-based recommendations.
+2. :white_check_mark: `/collaborative` - Collaborative filtering-based recommendations.
 3. `/content` - Content-based filtering movie recommendations.
 
 ## Current Status
