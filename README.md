@@ -8,7 +8,7 @@ A FastAPI-based movie recommendation system under active development. The goal o
 - **Content-Based Filtering:** Provides movie suggestions based on movie metadata such as genres, cast, and crew.
 
 ### Endpoints
-1. `/` - Provides popularity-based movie recommendations. (will be moved to `/popularity`)
+1. :white_check_mark: `/popularity` - Provides popularity-based movie recommendations.
 2. `/collaborative` - Collaborative filtering-based recommendations.
 3. `/content` - Content-based filtering movie recommendations.
 

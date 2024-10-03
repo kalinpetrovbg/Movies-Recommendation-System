@@ -12,11 +12,21 @@ templates = Jinja2Templates(directory="templates")
 app = FastAPI()
 
 @app.get("/", response_class=HTMLResponse)
-async def load_movies(request: Request):
+@app.get("/popularity", response_class=HTMLResponse)
+async def popularity(request: Request):
     movies_data = movies.get_movies_data()
     return templates.TemplateResponse(
-        "movies_table.html", {"request": request, "movies": movies_data}
+        "popularity.html", {"request": request, "movies": movies_data}
     )
+
+@app.get("/collaborative", response_class=HTMLResponse, deprecated=True)
+async def collaborative(request: Request):
+    pass
+
+@app.get("/content", response_class=HTMLResponse, deprecated=True)
+async def content(request: Request):
+    pass
+
 
 if __name__ == "__main__":
     uvicorn.run(app, host="127.0.0.1", port=8828)
