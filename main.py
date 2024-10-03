@@ -11,7 +11,7 @@ movies = PriorityBased("data/movies.csv")
 movies.load_data()
 movies.calculate_weighted_ratings()
 
-collaboratives = CollaborativeBased("data/movies.csv")  # Todo
+collaboratives = CollaborativeBased("data/movies.csv")
 
 templates = Jinja2Templates(directory="templates")
 app = FastAPI()
