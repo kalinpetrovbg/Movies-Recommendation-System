@@ -13,7 +13,7 @@ templates = Jinja2Templates(directory="templates")
 app = FastAPI()
 
 
-@app.get("/", response_class=HTMLResponse, tags=["view"])
+@app.get("/", response_class=HTMLResponse, tags=["view"], include_in_schema=False)
 async def home(request: Request):
     return templates.TemplateResponse("home.html", {"request": request})
 
