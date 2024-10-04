@@ -14,7 +14,7 @@ A FastAPI-based movie recommendation system under active development. The goal o
 
 
 ## Current Status
-- The popularity-based recommendation system is currently being developed.
-- The other endpoints (`/collaborative` and `/content`) are planned for future development.
+- The popularity-based and the content-based recommendation system are currently being developed.
+- The other endpoint (`/collaborative`) is under development.
   
 ## Project Structure
