@@ -58,14 +58,14 @@ async def popularity_api():
 
 
 @app.get(
-    "/api/content/{movie_name}",
+    "/api/content/{movie_name}/{num_movies}",
     response_model=list[ContentBasedModel],
     tags=["api"],
 )
-async def content_api(movie_name: str):
+async def content_api(movie_name: str, num_movies: int):
     try:
         con_movies = content_data.get_movies_api_data(
-            movie_name, number_of_movies=10
+            movie_name, num_movies
         )
     except IndexError:
         raise HTTPException(status_code=404, detail=f"Movie '{movie_name}' not found.")
