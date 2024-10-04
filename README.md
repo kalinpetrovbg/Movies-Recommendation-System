@@ -4,8 +4,8 @@ A FastAPI-based movie recommendation system under active development. The goal o
 
 ## Planned Features
 - **Popularity-Based Recommendations:** Uses a weighted rating system to rank movies.
-- **Collaborative Filtering:** Recommends movies based on user interactions and preferences.
 - **Content-Based Filtering:** Provides movie suggestions based on movie metadata such as genres, cast, and crew.
+- **Collaborative Filtering:** Recommends movies based on user interactions and preferences.
 
 ### Endpoints
 1. :white_check_mark: `/popularity` - Provides popularity-based movie recommendations.
