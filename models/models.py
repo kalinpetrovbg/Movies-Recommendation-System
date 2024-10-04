@@ -7,6 +7,9 @@ class Movie(BaseModel):
     vote_average: float
     weighted_rating: float
 
-class CollaborativeModel(BaseModel):
+class ContentBasedModel(BaseModel):
     id: int
     title: str
+
+class CollaborativeModel(BaseModel):
+    id: int
