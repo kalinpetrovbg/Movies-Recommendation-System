@@ -42,7 +42,8 @@ async def content(request: Request, movie_name: str):
     except IndexError:
         raise HTTPException(status_code=404, detail=f"Movie '{movie_name}' not found.")
     return templates.TemplateResponse(
-        "content.html", {"request": request, "movies": movies_data, "movie_name": movie_name}
+        "content.html",
+        {"request": request, "movies": movies_data, "movie_name": movie_name},
     )
 
 

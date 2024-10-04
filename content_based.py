@@ -23,13 +23,12 @@ class ContentBased:
         scores = list(enumerate(self.similarity_matrix[idx]))
         scores = sorted(scores, key=lambda x: x[1], reverse=True)
 
-        movies_indices = [score[0] for score in scores[
-                                                1:number_of_movies + 1]]
+        movies_indices = [score[0] for score in scores[1 : number_of_movies + 1]]
 
         similar_movies = [
             {
                 "id": self.movies.iloc[index]["id"],
-                "title": self.movies.iloc[index]["title"]
+                "title": self.movies.iloc[index]["title"],
             }
             for index in movies_indices
         ]
@@ -39,4 +38,3 @@ class ContentBased:
     def get_movies_data(self, movie_name, number_of_movies):
         movies = self.get_similar_movies(movie_name, number_of_movies)
         return movies
-
