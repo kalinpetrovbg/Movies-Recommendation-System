@@ -22,13 +22,13 @@ templates = Jinja2Templates(directory="templates")
 app = FastAPI()
 
 
-@app.get("/", response_class=HTMLResponse, tags=["view"], include_in_schema=False)
+@app.get("/", response_class=HTMLResponse, include_in_schema=False)
 async def home(request: Request):
     return templates.TemplateResponse("home.html", {"request": request})
 
 
 @app.get(
-    "/popularity", response_class=HTMLResponse, tags=["view"], include_in_schema=False
+    "/popularity", response_class=HTMLResponse, include_in_schema=False
 )
 async def popularity(request: Request):
     movies_data = priority_data.get_movies_data()
@@ -36,14 +36,7 @@ async def popularity(request: Request):
         "popularity.html", {"request": request, "movies": movies_data}
     )
 
-
-@app.get("/api/popularity", response_model=list[Movie], tags=["api"])
-async def popularity_api():
-    return priority_data.get_movies_data()
-
-
-
-@app.get("/content/{movie_name}", tags=["view"], include_in_schema=False)
+@app.get("/content/{movie_name}", include_in_schema=False)
 async def content(request: Request, movie_name: str):
     try:
         movies_data = content_data.get_movies_data(movie_name, number_of_movies=10)
@@ -54,6 +47,14 @@ async def content(request: Request, movie_name: str):
     )
 
 
+@app.get("/collaborative", include_in_schema=False)
+async def collaborative(request: Request):
+    return []
+
+
+@app.get("/api/popularity", response_model=list[Movie], tags=["api"])
+async def popularity_api():
+    return priority_data.get_movies_data()
 
 
 @app.get(
@@ -71,16 +72,12 @@ async def content_api(movie_name: str):
     return [ContentBasedModel(**movie) for movie in con_movies]
 
 
-@app.get("/collaborative", tags=["view"], include_in_schema=False)
-async def collaborative(request: Request):
-    return []
-
-
 @app.get(
     "/api/collaborative", tags=["api"],
 )
-async def collaborative_api(movie_name: str):
+async def collaborative_api():
     return []
+
 
 
 if __name__ == "__main__":
