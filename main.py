@@ -42,7 +42,7 @@ async def content(request: Request, movie_name: str):
     except IndexError:
         raise HTTPException(status_code=404, detail=f"Movie '{movie_name}' not found.")
     return templates.TemplateResponse(
-        "content.html", {"request": request, "movies": movies_data}
+        "content.html", {"request": request, "movies": movies_data, "movie_name": movie_name}
     )
 
 
@@ -63,10 +63,10 @@ async def popularity_api():
 )
 async def content_api(movie_name: str, num_movies: int):
     try:
-        con_movies = content_data.get_movies_api_data(movie_name, num_movies)
+        movies_data = content_data.get_movies_data(movie_name, num_movies)
     except IndexError:
         raise HTTPException(status_code=404, detail=f"Movie '{movie_name}' not found.")
-    return [ContentBasedModel(**movie) for movie in con_movies]
+    return movies_data
 
 
 @app.get(

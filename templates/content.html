@@ -9,17 +9,19 @@
 <body>
     <div class="container mt-5">
         <h1>Recommendation System Based on Content</h1>
-        <h4 class="text-secondary">Recommended Movies similar to "{{ movies[0] }}"</h4>
+        <h4 class="text-secondary">Recommended Movies similar to "{{ movie_name }}"</h4>
         <table class="table table-striped table-hover">
             <thead>
                 <tr>
+                    <th>ID</th>
                     <th>Title</th>
                 </tr>
             </thead>
             <tbody>
-                {% for movie in movies[1:] %}
+                {% for movie in movies %}
                 <tr>
-                    <td>{{ movie }}</td>
+                    <td>{{ movie["id"] }}</td>
+                    <td>{{ movie["title"] }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
