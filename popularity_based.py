@@ -3,8 +3,8 @@ from pandas import DataFrame, Series
 
 
 class PriorityBased:
-    def __init__(self, movies_filepath: str):
-        self.movies = pd.read_csv(movies_filepath)
+    def __init__(self, data: DataFrame):
+        self.movies = data
         self.filtered_movies = DataFrame()
         self.minimum_votes = 0
         self.all_votes_average = 0
@@ -34,4 +34,6 @@ class PriorityBased:
         )
 
     def get_movies_data(self) -> list:
+        self.load_data()
+        self.calculate_weighted_ratings()
         return self.filtered_movies.to_dict(orient="records")

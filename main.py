@@ -3,15 +3,15 @@ from fastapi.templating import Jinja2Templates
 from starlette.responses import HTMLResponse
 
 from collaborative_based import CollaborativeBased
+from data.scripts.movies_data import MovieData
 from popularity_based import PriorityBased
 import uvicorn
 from models.models import Movie, CollaborativeModel
 
-movies = PriorityBased("data/movies.csv")
-movies.load_data()
-movies.calculate_weighted_ratings()
+movies_csv = MovieData.get_instance("data/movies.csv")
 
-collaboratives = CollaborativeBased("data/movies.csv")
+movies = PriorityBased(movies_csv.data)
+collaboratives = CollaborativeBased(movies_csv.data)
 
 templates = Jinja2Templates(directory="templates")
 app = FastAPI()

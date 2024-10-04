@@ -1,4 +1,4 @@
-import pandas as pd
+from pandas import DataFrame, Series
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel
 
@@ -6,8 +6,8 @@ tfidf = TfidfVectorizer(stop_words="english")
 
 
 class CollaborativeBased:
-    def __init__(self, movies_filepath: str):
-        self.movies = pd.read_csv(movies_filepath)
+    def __init__(self, data: DataFrame):
+        self.movies = data
         self.clean_empty_overview_data()
         self.tfidf_matrix = tfidf.fit_transform(self.movies["overview"])
         self.similarity_matrix = linear_kernel(self.tfidf_matrix, self.tfidf_matrix)
