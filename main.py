@@ -1,13 +1,13 @@
-from fastapi import FastAPI, Request, HTTPException
+import uvicorn
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.templating import Jinja2Templates
 from starlette.responses import HTMLResponse
 
 from collaborative_based import CollaborativeBased
-from data.scripts.movies_data import MovieData
-from popularity_based import PriorityBased
 from content_based import ContentBased
-import uvicorn
-from models.models import Movie, CollaborativeModel, ContentBasedModel
+from data.scripts.movies_data import MovieData
+from models.models import CollaborativeModel, ContentBasedModel, Movie
+from popularity_based import PriorityBased
 
 movies_csv = MovieData("data/movies.csv")
 ratings_csv = MovieData("data/ratings.csv")
@@ -27,14 +27,13 @@ async def home(request: Request):
     return templates.TemplateResponse("home.html", {"request": request})
 
 
-@app.get(
-    "/popularity", response_class=HTMLResponse, include_in_schema=False
-)
+@app.get("/popularity", response_class=HTMLResponse, include_in_schema=False)
 async def popularity(request: Request):
     movies_data = priority_data.get_movies_data()
     return templates.TemplateResponse(
         "popularity.html", {"request": request, "movies": movies_data}
     )
+
 
 @app.get("/content/{movie_name}", include_in_schema=False)
 async def content(request: Request, movie_name: str):
@@ -64,20 +63,18 @@ async def popularity_api():
 )
 async def content_api(movie_name: str, num_movies: int):
     try:
-        con_movies = content_data.get_movies_api_data(
-            movie_name, num_movies
-        )
+        con_movies = content_data.get_movies_api_data(movie_name, num_movies)
     except IndexError:
         raise HTTPException(status_code=404, detail=f"Movie '{movie_name}' not found.")
     return [ContentBasedModel(**movie) for movie in con_movies]
 
 
 @app.get(
-    "/api/collaborative", tags=["api"],
+    "/api/collaborative",
+    tags=["api"],
 )
 async def collaborative_api():
     return []
-
 
 
 if __name__ == "__main__":
