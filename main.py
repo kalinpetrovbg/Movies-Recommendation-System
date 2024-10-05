@@ -10,12 +10,9 @@ from models.models import CollaborativeModel, ContentBasedModel, Movie
 from popularity_based import PriorityBased
 
 movies_csv = MovieData("data/movies.csv")
-ratings_csv = MovieData("data/ratings.csv")
-credits_csv = MovieData("data/credits.csv")
-
 priority_data = PriorityBased(movies_csv.data)
 content_data = ContentBased(movies_csv.data)
-collaborative_data = CollaborativeBased(movies_csv.data)
+collaborative_data = CollaborativeBased("data/ratings.csv")
 
 
 templates = Jinja2Templates(directory="templates")
@@ -47,9 +44,17 @@ async def content(request: Request, movie_name: str):
     )
 
 
-@app.get("/collaborative", include_in_schema=False)
-async def collaborative(request: Request):
-    return []
+@app.get("/api/collaborative/{user_id}", tags=["api"])
+async def collaborative_api(user_id: int):
+    try:
+        user_id = int(user_id)
+        recommendations = collaborative_data.get_recommendations(user_id, 6)
+        if isinstance(recommendations, str):
+            raise HTTPException(status_code=404, detail=recommendations)
+        return {"user_id": user_id, "recommendations": recommendations}
+    except ValueError:
+        raise HTTPException(status_code=400, detail="User ID must be an integer")
+
 
 
 @app.get("/api/popularity", response_model=list[Movie], tags=["api"])
