@@ -16,13 +16,11 @@ class CollaborativeBased:
         self.svd.fit(self.trainset)
 
     def get_recommendations(self, user_id, top_n=6):
-        if user_id not in self.trainset.all_users():
-            return "User ID does not exist in the dataset"
+        if not self.trainset.knows_user(user_id):
+            raise ValueError(f"User ID {user_id} does not exist in the dataset")
 
         # Predict ratings for all movies that the user hasn't rated yet
-        rated_movies = self.ratings[self.ratings["userId"] == user_id][
-            "movieId"
-        ].tolist()
+        rated_movies = self.ratings[self.ratings["userId"] == user_id]["movieId"].tolist()
         all_movies = self.ratings["movieId"].unique()
         unrated_movies = [movie for movie in all_movies if movie not in rated_movies]
 
@@ -32,6 +30,6 @@ class CollaborativeBased:
         predictions.sort(key=lambda x: x.est, reverse=True)
 
         # Get the top N recommendations
-        recommended_movie_ids = [pred.iid for pred in predictions[:top_n]]
+        recommended_movie_ids = [int(pred.iid) for pred in predictions[:top_n]]
 
         return recommended_movie_ids

@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-
+from typing import List
 
 class Movie(BaseModel):
     id: int
@@ -9,10 +9,11 @@ class Movie(BaseModel):
     weighted_rating: float
 
 
-class ContentBasedModel(BaseModel):
+class MovieRecommendation(BaseModel):
     id: int
     title: str
 
 
 class CollaborativeModel(BaseModel):
-    id: int
+    user_id: int
+    recommendations: List[MovieRecommendation]

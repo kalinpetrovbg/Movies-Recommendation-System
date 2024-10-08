@@ -9,7 +9,7 @@ from starlette.responses import HTMLResponse
 from collaborative_based import CollaborativeBased
 from content_based import ContentBased
 from data.scripts.movies_data import MovieData
-from models.models import CollaborativeModel, ContentBasedModel, Movie
+from models.models import CollaborativeModel, MovieRecommendation, Movie
 from popularity_based import PriorityBased
 
 logging.basicConfig(level=logging.INFO)
@@ -50,9 +50,7 @@ async def content(request: Request, movie_name: str):
     )
 
 
-@app.get(
-    "/collaborative/{user_id}", response_class=HTMLResponse, include_in_schema=False
-)
+@app.get("/collaborative/{user_id}", response_class=HTMLResponse, include_in_schema=False)
 async def collaborative(request: Request, user_id: int):
     try:
         recommendation_ids = collaborative_data.get_recommendations(user_id, 6)
@@ -70,8 +68,8 @@ async def collaborative(request: Request, user_id: int):
                 "recommendations": recommendations,
             },
         )
-    except ValueError:
-        raise HTTPException(status_code=400, detail="User ID must be an integer")
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
 
 
 @app.get("/api/popularity", response_model=list[Movie], tags=["api"])
@@ -81,7 +79,7 @@ async def popularity_api():
 
 @app.get(
     "/api/content/{movie_name}/{num_movies}",
-    response_model=list[ContentBasedModel],
+    response_model=list[MovieRecommendation],
     tags=["api"],
 )
 async def content_api(movie_name: str, num_movies: int):
@@ -92,18 +90,22 @@ async def content_api(movie_name: str, num_movies: int):
     return movies_data
 
 
-@app.get("/api/collaborative/{user_id}", tags=["api"])
+@app.get("/api/collaborative/{user_id}", response_model=CollaborativeModel, tags=["api"])
 async def collaborative_api(user_id: int):
     try:
-        recommendations = collaborative_data.get_recommendations(user_id, 6)
-        if isinstance(recommendations, str):
-            raise HTTPException(status_code=404, detail=recommendations)
+        recommendation_ids = collaborative_data.get_recommendations(user_id, 6)
         recommendations = [
-            int(rec) if isinstance(rec, np.integer) else rec for rec in recommendations
+            {
+                "id": movie_id,
+                "title": movies_csv.get_title_by_id(movie_id)
+            }
+            for movie_id in recommendation_ids
         ]
+
         return {"user_id": user_id, "recommendations": recommendations}
-    except ValueError:
-        raise HTTPException(status_code=400, detail="User ID must be an integer")
+
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
 
 
 if __name__ == "__main__":
