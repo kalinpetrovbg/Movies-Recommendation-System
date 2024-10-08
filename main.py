@@ -1,3 +1,5 @@
+import logging
+
 import numpy as np
 import uvicorn
 from fastapi import FastAPI, HTTPException, Request
@@ -9,6 +11,9 @@ from content_based import ContentBased
 from data.scripts.movies_data import MovieData
 from models.models import CollaborativeModel, ContentBasedModel, Movie
 from popularity_based import PriorityBased
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 movies_csv = MovieData("data/movies.csv")
 priority_data = PriorityBased(movies_csv.data)
@@ -33,7 +38,7 @@ async def popularity(request: Request):
     )
 
 
-@app.get("/content/{movie_name}", include_in_schema=False)
+@app.get("/content/{movie_name}", response_class=HTMLResponse, include_in_schema=False)
 async def content(request: Request, movie_name: str):
     try:
         movies_data = content_data.get_movies_data(movie_name, number_of_movies=10)
@@ -45,25 +50,28 @@ async def content(request: Request, movie_name: str):
     )
 
 
-@app.get("/collaborative/{user_id}", response_class=HTMLResponse, include_in_schema=False)
+@app.get(
+    "/collaborative/{user_id}", response_class=HTMLResponse, include_in_schema=False
+)
 async def collaborative(request: Request, user_id: int):
     try:
         recommendation_ids = collaborative_data.get_recommendations(user_id, 6)
-        if isinstance(recommendation_ids, str):
-            raise HTTPException(status_code=404, detail=recommendation_ids)
 
         recommendations = [
-            {'id': movie_id, 'title': movies_csv.get_title_by_id(movie_id)} for
-            movie_id in recommendation_ids]
+            {"id": movie_id, "title": movies_csv.get_title_by_id(movie_id)}
+            for movie_id in recommendation_ids
+        ]
 
         return templates.TemplateResponse(
             "collaborative.html",
-            {"request": request, "user_id": user_id,
-             "recommendations": recommendations}
+            {
+                "request": request,
+                "user_id": user_id,
+                "recommendations": recommendations,
+            },
         )
     except ValueError:
-        raise HTTPException(status_code=400,
-                            detail="User ID must be an integer")
+        raise HTTPException(status_code=400, detail="User ID must be an integer")
 
 
 @app.get("/api/popularity", response_model=list[Movie], tags=["api"])
