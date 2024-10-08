@@ -1,14 +1,28 @@
 from fastapi import APIRouter, HTTPException, Path
 from pydantic import PositiveInt
 
-from dependencies import (collaborative_data, content_data, movie_id_to_title,
-                          priority_data)
+from dependencies import (
+    collaborative_data,
+    content_data,
+    movie_id_to_title,
+    priority_data,
+)
 from models.models import CollaborativeModel, Movie, MovieRecommendation
 
 router = APIRouter()
 
 
-@router.get("/api/popularity", response_model=list[Movie], tags=["api"])
+@router.get(
+    "/api/popularity",
+    response_model=list[Movie],
+    tags=["api"],
+    summary="Get the most popular movies.",
+    description=(
+        "Returns a list of movies ranked by popularity. "
+        "It is based on a weighted rating system."
+    ),
+    response_description="A list of movies sorted by popularity.",
+)
 async def popularity_api():
     return priority_data.get_movies_data()
 
