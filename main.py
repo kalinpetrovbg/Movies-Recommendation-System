@@ -9,7 +9,7 @@ from starlette.responses import HTMLResponse
 from collaborative_based import CollaborativeBased
 from content_based import ContentBased
 from data.scripts.movies_data import MovieData
-from models.models import CollaborativeModel, MovieRecommendation, Movie
+from models.models import CollaborativeModel, Movie, MovieRecommendation
 from popularity_based import PriorityBased
 
 logging.basicConfig(level=logging.INFO)
@@ -50,7 +50,9 @@ async def content(request: Request, movie_name: str):
     )
 
 
-@app.get("/collaborative/{user_id}", response_class=HTMLResponse, include_in_schema=False)
+@app.get(
+    "/collaborative/{user_id}", response_class=HTMLResponse, include_in_schema=False
+)
 async def collaborative(request: Request, user_id: int):
     try:
         recommendation_ids = collaborative_data.get_recommendations(user_id, 6)
@@ -90,15 +92,14 @@ async def content_api(movie_name: str, num_movies: int):
     return movies_data
 
 
-@app.get("/api/collaborative/{user_id}", response_model=CollaborativeModel, tags=["api"])
+@app.get(
+    "/api/collaborative/{user_id}", response_model=CollaborativeModel, tags=["api"]
+)
 async def collaborative_api(user_id: int):
     try:
         recommendation_ids = collaborative_data.get_recommendations(user_id, 6)
         recommendations = [
-            {
-                "id": movie_id,
-                "title": movies_csv.get_title_by_id(movie_id)
-            }
+            {"id": movie_id, "title": movies_csv.get_title_by_id(movie_id)}
             for movie_id in recommendation_ids
         ]
 

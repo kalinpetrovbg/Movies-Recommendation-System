@@ -20,7 +20,9 @@ class CollaborativeBased:
             raise ValueError(f"User ID {user_id} does not exist in the dataset")
 
         # Predict ratings for all movies that the user hasn't rated yet
-        rated_movies = self.ratings[self.ratings["userId"] == user_id]["movieId"].tolist()
+        rated_movies = self.ratings[self.ratings["userId"] == user_id][
+            "movieId"
+        ].tolist()
         all_movies = self.ratings["movieId"].unique()
         unrated_movies = [movie for movie in all_movies if movie not in rated_movies]
 
