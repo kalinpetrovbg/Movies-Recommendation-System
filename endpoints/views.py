@@ -1,13 +1,8 @@
-from fastapi import APIRouter, Request, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from starlette.responses import HTMLResponse
 
-from dependencies import (
-    templates,
-    priority_data,
-    content_data,
-    collaborative_data,
-    movie_id_to_title,
-)
+from dependencies import (collaborative_data, content_data, movie_id_to_title,
+                          priority_data, templates)
 
 router = APIRouter()
 
@@ -25,10 +20,14 @@ async def popularity(request: Request):
     )
 
 
-@router.get("/content/{movie_name}", response_class=HTMLResponse, include_in_schema=False)
-async def content(request: Request, movie_name: str):
+@router.get(
+    "/content/{movie_name}/{num_movies}",
+    response_class=HTMLResponse,
+    include_in_schema=False,
+)
+async def content(request: Request, movie_name: str, num_movies: int):
     try:
-        movies_data = content_data.get_movies_data(movie_name, number_of_movies=10)
+        movies_data = content_data.get_movies_data(movie_name, num_movies)
     except IndexError:
         raise HTTPException(status_code=404, detail=f"Movie '{movie_name}' not found.")
     return templates.TemplateResponse(
@@ -37,10 +36,14 @@ async def content(request: Request, movie_name: str):
     )
 
 
-@router.get("/collaborative/{user_id}", response_class=HTMLResponse, include_in_schema=False)
-async def collaborative(request: Request, user_id: int):
+@router.get(
+    "/collaborative/{user_id}/{num_movies}",
+    response_class=HTMLResponse,
+    include_in_schema=False,
+)
+async def collaborative(request: Request, user_id: int, num_movies: int):
     try:
-        recommendation_ids = collaborative_data.get_recommendations(user_id, 6)
+        recommendation_ids = collaborative_data.get_recommendations(user_id, num_movies)
 
         recommendations = [
             {
