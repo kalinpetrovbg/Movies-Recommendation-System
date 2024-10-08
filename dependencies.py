@@ -1,7 +1,7 @@
 from data.scripts.movies_data import MovieData
-from popularity_based import PriorityBased
-from content_based import ContentBased
-from collaborative_based import CollaborativeBased
+from algorithms.popularity_based import PriorityBased
+from algorithms.content_based import ContentBased
+from algorithms.collaborative_based import CollaborativeBased
 from fastapi.templating import Jinja2Templates
 
 templates = Jinja2Templates(directory="templates")
