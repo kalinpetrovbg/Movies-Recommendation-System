@@ -2,6 +2,7 @@ import uvicorn
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.templating import Jinja2Templates
 from starlette.responses import HTMLResponse
+import numpy as np
 
 from collaborative_based import CollaborativeBased
 from content_based import ContentBased
@@ -44,13 +45,13 @@ async def content(request: Request, movie_name: str):
     )
 
 
-@app.get("/api/collaborative/{user_id}", tags=["api"])
-async def collaborative_api(user_id: int):
+@app.get("/collaborative/{user_id}", tags=["api"])
+async def collaborative(user_id: int):
     try:
-        user_id = int(user_id)
         recommendations = collaborative_data.get_recommendations(user_id, 6)
         if isinstance(recommendations, str):
             raise HTTPException(status_code=404, detail=recommendations)
+        recommendations = [int(rec) if isinstance(rec, np.integer) else rec for rec in recommendations]
         return {"user_id": user_id, "recommendations": recommendations}
     except ValueError:
         raise HTTPException(status_code=400, detail="User ID must be an integer")

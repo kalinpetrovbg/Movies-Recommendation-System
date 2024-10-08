@@ -22,12 +22,9 @@ class CollaborativeBased:
         unrated_movies = [movie for movie in all_movies if movie not in rated_movies]
 
         predictions = [self.svd.predict(user_id, movie_id) for movie_id in unrated_movies]
-
-        # Sort by estimated ratings
         predictions.sort(key=lambda x: x.est, reverse=True)
 
         # Get the top N recommendations
-        top_recommendations = predictions[:top_n]
-        recommended_movie_ids = [pred.iid for pred in top_recommendations]
+        recommended_movie_ids = [pred.iid for pred in predictions[:top_n]]
 
         return recommended_movie_ids
