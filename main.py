@@ -1,8 +1,8 @@
+import numpy as np
 import uvicorn
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.templating import Jinja2Templates
 from starlette.responses import HTMLResponse
-import numpy as np
 
 from collaborative_based import CollaborativeBased
 from content_based import ContentBased
@@ -45,17 +45,25 @@ async def content(request: Request, movie_name: str):
     )
 
 
-@app.get("/collaborative/{user_id}", tags=["api"])
-async def collaborative(user_id: int):
+@app.get("/collaborative/{user_id}", response_class=HTMLResponse, include_in_schema=False)
+async def collaborative(request: Request, user_id: int):
     try:
-        recommendations = collaborative_data.get_recommendations(user_id, 6)
-        if isinstance(recommendations, str):
-            raise HTTPException(status_code=404, detail=recommendations)
-        recommendations = [int(rec) if isinstance(rec, np.integer) else rec for rec in recommendations]
-        return {"user_id": user_id, "recommendations": recommendations}
-    except ValueError:
-        raise HTTPException(status_code=400, detail="User ID must be an integer")
+        recommendation_ids = collaborative_data.get_recommendations(user_id, 6)
+        if isinstance(recommendation_ids, str):
+            raise HTTPException(status_code=404, detail=recommendation_ids)
 
+        recommendations = [
+            {'id': movie_id, 'title': movies_csv.get_title_by_id(movie_id)} for
+            movie_id in recommendation_ids]
+
+        return templates.TemplateResponse(
+            "collaborative.html",
+            {"request": request, "user_id": user_id,
+             "recommendations": recommendations}
+        )
+    except ValueError:
+        raise HTTPException(status_code=400,
+                            detail="User ID must be an integer")
 
 
 @app.get("/api/popularity", response_model=list[Movie], tags=["api"])
@@ -76,12 +84,18 @@ async def content_api(movie_name: str, num_movies: int):
     return movies_data
 
 
-@app.get(
-    "/api/collaborative",
-    tags=["api"],
-)
-async def collaborative_api():
-    return []
+@app.get("/api/collaborative/{user_id}", tags=["api"])
+async def collaborative_api(user_id: int):
+    try:
+        recommendations = collaborative_data.get_recommendations(user_id, 6)
+        if isinstance(recommendations, str):
+            raise HTTPException(status_code=404, detail=recommendations)
+        recommendations = [
+            int(rec) if isinstance(rec, np.integer) else rec for rec in recommendations
+        ]
+        return {"user_id": user_id, "recommendations": recommendations}
+    except ValueError:
+        raise HTTPException(status_code=400, detail="User ID must be an integer")
 
 
 if __name__ == "__main__":
