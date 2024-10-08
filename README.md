@@ -15,9 +15,10 @@ A FastAPI-based movie recommendation system under active development. The goal o
 
 ## Current Status
 - All 3 recommendation systems are currently being developed.
+- ![Coverage](https://img.shields.io/badge/Coverage-100%25-brightgreen)
 
 ## Next Steps:
-- Test Coverage: Implement comprehensive test coverage using pytest to ensure the reliability and stability of the application.
+- Implement Dependency Injection: To improve flexibility, testability, and maintainability by decoupling components.
 - Database Integration: Transition from loading data from CSV files to using a simple database (e.g., SQLite, PostgreSQL) for better scalability and data management.
 - API Enhancements: Create additional endpoints to POST, PUT, and DELETE data, enabling dynamic data manipulation and management through the API.
 
