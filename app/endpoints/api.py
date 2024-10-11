@@ -1,13 +1,12 @@
 from fastapi import APIRouter, HTTPException, Path
-from pydantic import PositiveInt
 
-from dependencies import (
+from app.dependencies import (
     collaborative_data,
     content_data,
     movie_id_to_title,
     priority_data,
 )
-from models.models import CollaborativeModel, Movie, MovieRecommendation
+from app.schemas.models import CollaborativeModel, Movie, MovieRecommendation
 
 router = APIRouter()
 

@@ -4,7 +4,7 @@ from algorithms.collaborative_based import CollaborativeBased
 from algorithms.content_based import ContentBased
 from algorithms.popularity_based import PriorityBased
 from config import DATA_DIR, TEMPLATE_DIR
-from data.scripts.movies_data import MovieData
+from app.database.movies_data import MovieData
 
 templates = Jinja2Templates(directory=str(TEMPLATE_DIR))
 

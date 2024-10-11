@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Request
 from starlette.responses import HTMLResponse
 
-from dependencies import (
+from app.dependencies import (
     collaborative_data,
     content_data,
     movie_id_to_title,

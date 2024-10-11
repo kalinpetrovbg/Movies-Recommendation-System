@@ -3,7 +3,7 @@ from unittest.mock import patch
 import pandas as pd
 import pytest
 
-from data.scripts.movies_data import MovieData
+from app.database.movies_data import MovieData
 
 
 @pytest.fixture
