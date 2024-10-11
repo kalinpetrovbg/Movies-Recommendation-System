@@ -10,7 +10,9 @@ class ContentBased:
         self.movies = data
         self.clean_empty_overview_data()
         self.tfidf_matrix = tfidf.fit_transform(self.movies["overview"])
-        self.similarity_matrix = linear_kernel(self.tfidf_matrix, self.tfidf_matrix)
+        self.similarity_matrix = linear_kernel(
+            self.tfidf_matrix, self.tfidf_matrix
+        )
 
     def clean_empty_overview_data(self):
         self.movies["overview"] = self.movies["overview"].fillna("")

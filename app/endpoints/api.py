@@ -33,12 +33,16 @@ async def content_api(
     movie_name: str = Path(
         ..., min_length=2, description="Movie name for recommendations"
     ),
-    num_movies: int = Path(..., gt=0, description="Number of movies to recommend"),
+    num_movies: int = Path(
+        ..., gt=0, description="Number of movies to recommend"
+    ),
 ):
     try:
         movies_data = content_data.get_movies_data(movie_name, num_movies)
     except IndexError:
-        raise HTTPException(status_code=404, detail=f"Movie '{movie_name}' not found.")
+        raise HTTPException(
+            status_code=404, detail=f"Movie '{movie_name}' not found."
+        )
     return movies_data
 
 
@@ -55,10 +59,14 @@ async def content_api(
 )
 async def collaborative_api(
     user_id: int = Path(..., gt=0, description="User ID"),
-    num_movies: int = Path(..., gt=0, description="Number of movies to recommend"),
+    num_movies: int = Path(
+        ..., gt=0, description="Number of movies to recommend"
+    ),
 ):
     try:
-        recommendations = collaborative_data.get_recommendations(user_id, num_movies)
+        recommendations = collaborative_data.get_recommendations(
+            user_id, num_movies
+        )
         return {"user_id": user_id, "recommendations": recommendations}
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))

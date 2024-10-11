@@ -11,5 +11,7 @@ templates = Jinja2Templates(directory=str(TEMPLATE_DIR))
 movies_csv = MovieData(DATA_DIR / "movies.csv")
 priority_data = PriorityBased(movies_csv.data)
 content_data = ContentBased(movies_csv.data)
-collaborative_data = CollaborativeBased(DATA_DIR / "ratings.csv", DATA_DIR / "movies.csv")
+collaborative_data = CollaborativeBased(
+    DATA_DIR / "ratings.csv", DATA_DIR / "movies.csv"
+)
 movie_id_to_title = dict(zip(movies_csv.data["id"], movies_csv.data["title"]))

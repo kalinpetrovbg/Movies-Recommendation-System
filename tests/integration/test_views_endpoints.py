@@ -34,4 +34,6 @@ def test_collaborative():
 def test_collaborative_with_wrong_user_id():
     response = client.get("/collaborative/-2/10")
     assert response.status_code == 404
-    assert response.json() == {"detail": "User ID -2 does not exist in the dataset"}
+    assert response.json() == {
+        "detail": "User ID -2 does not exist in the dataset"
+    }

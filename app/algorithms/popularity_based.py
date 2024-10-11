@@ -16,12 +16,14 @@ class PriorityBased:
         ]
 
     def calculate_weighted_ratings(self):
-        def weighted_rating(row: Series, min_votes: float, votes_average: float) -> float:
+        def weighted_rating(
+            row: Series, min_votes: float, votes_average: float
+        ) -> float:
             vote_average = row["vote_average"]
             vote_count = row["vote_count"]
-            weighted = ((vote_count / (vote_count + min_votes)) * vote_average) + (
-                min_votes / (vote_count + min_votes) * votes_average
-            )
+            weighted = (
+                (vote_count / (vote_count + min_votes)) * vote_average
+            ) + (min_votes / (vote_count + min_votes) * votes_average)
             return round(weighted, 3)
 
         self.filtered_movies["weighted_rating"] = self.filtered_movies.apply(

@@ -24,11 +24,14 @@ def test_get_similar_movies():
 
     cb = ContentBased(mock_data)
 
-    recommendations = cb.get_similar_movies(title="Terminator", number_of_movies=2)
+    recommendations = cb.get_similar_movies(
+        title="Terminator", number_of_movies=2
+    )
 
     assert len(recommendations) == 2
     assert "id" in recommendations[0]
     assert recommendations[0]["title"] == "Terminator 3: Rise of the Machines"
     assert (
-        recommendations[0]["similarity_score"] >= recommendations[1]["similarity_score"]
+        recommendations[0]["similarity_score"]
+        >= recommendations[1]["similarity_score"]
     )

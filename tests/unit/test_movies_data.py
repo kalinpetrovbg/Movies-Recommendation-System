@@ -8,7 +8,9 @@ from app.database.movies_data import MovieData
 
 @pytest.fixture
 def test_data():
-    return pd.DataFrame({"id": [1, 2, 3], "title": ["Titanic", "WALL·E", "Gladiator"]})
+    return pd.DataFrame(
+        {"id": [1, 2, 3], "title": ["Titanic", "WALL·E", "Gladiator"]}
+    )
 
 
 @patch("pandas.read_csv")

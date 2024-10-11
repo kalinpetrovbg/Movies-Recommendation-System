@@ -21,7 +21,8 @@ def test_priority_based():
 
     assert len(movies_data) > 0
     assert all(
-        movies_data[i]["weighted_rating"] >= movies_data[i + 1]["weighted_rating"]
+        movies_data[i]["weighted_rating"]
+        >= movies_data[i + 1]["weighted_rating"]
         for i in range(len(movies_data) - 1)
     )
 

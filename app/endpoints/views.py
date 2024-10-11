@@ -1,7 +1,12 @@
 from fastapi import APIRouter, HTTPException, Request
 from starlette.responses import HTMLResponse
 
-from app.dependencies import collaborative_data, content_data, priority_data, templates
+from app.dependencies import (
+    collaborative_data,
+    content_data,
+    priority_data,
+    templates,
+)
 
 router = APIRouter()
 
@@ -28,7 +33,9 @@ async def content(request: Request, movie_name: str, num_movies: int):
     try:
         movies_data = content_data.get_movies_data(movie_name, num_movies)
     except IndexError:
-        raise HTTPException(status_code=404, detail=f"Movie '{movie_name}' not found.")
+        raise HTTPException(
+            status_code=404, detail=f"Movie '{movie_name}' not found."
+        )
     return templates.TemplateResponse(
         "content.html",
         {"request": request, "movies": movies_data, "movie_name": movie_name},
@@ -42,7 +49,9 @@ async def content(request: Request, movie_name: str, num_movies: int):
 )
 async def collaborative(request: Request, user_id: int, num_movies: int):
     try:
-        recommendations = collaborative_data.get_recommendations(user_id, num_movies)
+        recommendations = collaborative_data.get_recommendations(
+            user_id, num_movies
+        )
         return templates.TemplateResponse(
             "collaborative.html",
             {
