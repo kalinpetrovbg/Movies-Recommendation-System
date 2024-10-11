@@ -46,6 +46,21 @@ class CollaborativeBased:
         predictions.sort(key=lambda x: x.est, reverse=True)
 
         # Get the top N recommendations
-        recommended_movie_ids = [int(pred.iid) for pred in predictions[:top_n]]
+        recommended_movies = [
+            {
+                "id": int(pred.iid),
+                "title": self.get_movie_title(int(pred.iid)),
+                "score": round(
+                    pred.est, 3
+                ),  # Add the estimated score rounded to 3 decimal places
+            }
+            for pred in predictions[:top_n]
+        ]
 
-        return recommended_movie_ids
+        return recommended_movies
+
+    def get_movie_title(self, movie_id):
+        movie_row = self.movies[self.movies["id"] == movie_id]
+        if not movie_row.empty:
+            return movie_row.iloc[0]["title"]
+        return "Title Not Found"

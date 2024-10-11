@@ -3,17 +3,24 @@ from typing import List
 from pydantic import BaseModel
 
 
-class Movie(BaseModel):
+class BaseMovie(BaseModel):
     id: int
     title: str
+
+
+class Movie(BaseMovie):
+    weighted_rating: float
     vote_count: int
     vote_average: float
-    weighted_rating: float
+    release_date: str
 
 
-class MovieRecommendation(BaseModel):
-    id: int
-    title: str
+class ContentModel(BaseMovie):
+    similarity_score: float
+
+
+class MovieRecommendation(BaseMovie):
+    score: float
 
 
 class CollaborativeModel(BaseModel):

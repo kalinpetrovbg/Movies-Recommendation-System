@@ -1,8 +1,7 @@
 import uvicorn
-from fastapi import FastAPI
-
 from endpoints.api import router as api_router
 from endpoints.views import router as views_router
+from fastapi import FastAPI
 
 app = FastAPI()
 

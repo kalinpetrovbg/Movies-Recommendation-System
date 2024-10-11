@@ -1,12 +1,7 @@
 from fastapi import APIRouter, HTTPException, Path
 
-from app.dependencies import (
-    collaborative_data,
-    content_data,
-    movie_id_to_title,
-    priority_data,
-)
-from app.schemas.models import CollaborativeModel, Movie, MovieRecommendation
+from app.dependencies import collaborative_data, content_data, priority_data
+from app.schemas.models import CollaborativeModel, ContentModel, Movie
 
 router = APIRouter()
 
@@ -28,7 +23,7 @@ async def popularity_api():
 
 @router.get(
     "/api/content/{movie_name}/{num_movies}",
-    response_model=list[MovieRecommendation],
+    response_model=list[ContentModel],
     tags=["api"],
     summary="Get content-based movie recommendations.",
     description="Returns a list of movies similar to the specified movie.",
@@ -63,15 +58,7 @@ async def collaborative_api(
     num_movies: int = Path(..., gt=0, description="Number of movies to recommend"),
 ):
     try:
-        recommendation_ids = collaborative_data.get_recommendations(user_id, num_movies)
-        recommendations = [
-            {
-                "id": movie_id,
-                "title": movie_id_to_title.get(movie_id, "Title Not Found"),
-            }
-            for movie_id in recommendation_ids
-        ]
-
+        recommendations = collaborative_data.get_recommendations(user_id, num_movies)
         return {"user_id": user_id, "recommendations": recommendations}
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))

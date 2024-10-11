@@ -1,13 +1,7 @@
 from fastapi import APIRouter, HTTPException, Request
 from starlette.responses import HTMLResponse
 
-from app.dependencies import (
-    collaborative_data,
-    content_data,
-    movie_id_to_title,
-    priority_data,
-    templates,
-)
+from app.dependencies import collaborative_data, content_data, priority_data, templates
 
 router = APIRouter()
 
@@ -48,16 +42,7 @@ async def content(request: Request, movie_name: str, num_movies: int):
 )
 async def collaborative(request: Request, user_id: int, num_movies: int):
     try:
-        recommendation_ids = collaborative_data.get_recommendations(user_id, num_movies)
-
-        recommendations = [
-            {
-                "id": movie_id,
-                "title": movie_id_to_title.get(movie_id, "Title Not Found"),
-            }
-            for movie_id in recommendation_ids
-        ]
-
+        recommendations = collaborative_data.get_recommendations(user_id, num_movies)
         return templates.TemplateResponse(
             "collaborative.html",
             {

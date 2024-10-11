@@ -1,4 +1,4 @@
-from pandas import DataFrame, Series
+from pandas import DataFrame
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel
 
@@ -23,14 +23,15 @@ class ContentBased:
         scores = list(enumerate(self.similarity_matrix[idx]))
         scores = sorted(scores, key=lambda x: x[1], reverse=True)
 
-        movies_indices = [score[0] for score in scores[1 : number_of_movies + 1]]
+        movies_indices = scores[1 : number_of_movies + 1]
 
         similar_movies = [
             {
                 "id": self.movies.iloc[index]["id"],
                 "title": self.movies.iloc[index]["title"],
+                "similarity_score": round(score, 3),
             }
-            for index in movies_indices
+            for index, score in movies_indices
         ]
 
         return similar_movies
