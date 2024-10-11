@@ -61,6 +61,4 @@ class CollaborativeBased:
 
     def get_movie_title(self, movie_id):
         movie_row = self.movies[self.movies["id"] == movie_id]
-        if not movie_row.empty:
-            return movie_row.iloc[0]["title"]
-        return "Title Not Found"
+        return movie_row.iloc[0]["title"]

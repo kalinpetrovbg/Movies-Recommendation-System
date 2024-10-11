@@ -1,8 +1,8 @@
-from algorithms.collaborative_based import CollaborativeBased
-from algorithms.content_based import ContentBased
-from algorithms.popularity_based import PriorityBased
 from fastapi.templating import Jinja2Templates
 
+from app.algorithms.collaborative_based import CollaborativeBased
+from app.algorithms.content_based import ContentBased
+from app.algorithms.popularity_based import PriorityBased
 from app.database.movies_data import MovieData
 from config import DATA_DIR, TEMPLATE_DIR
 
