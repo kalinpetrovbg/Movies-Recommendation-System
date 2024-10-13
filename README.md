@@ -16,6 +16,7 @@ A FastAPI-based movie recommendation system under active development. The goal o
 ## Current Status
 - All 3 recommendation systems are currently being developed.
 - ![Coverage](https://img.shields.io/badge/Coverage-100%25-brightgreen)
+- GitHub Actions Integration: Automated CI pipeline set up with GitHub Actions to run tests on every push to the production branch, ensuring code quality and stability.
 
 ## Next Steps:
 - Implement Dependency Injection: To improve flexibility, testability, and maintainability by decoupling components.
