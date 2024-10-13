@@ -27,6 +27,10 @@ jobs:
         source venv/bin/activate
         pip install -r requirements.txt
 
+    - name: Set PYTHONPATH
+      run: |
+        echo "PYTHONPATH=$(pwd)" >> $GITHUB_ENV
+
     - name: Run the unit tests
       run: |
         source venv/bin/activate
