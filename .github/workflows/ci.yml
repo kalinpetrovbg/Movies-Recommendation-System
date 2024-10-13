@@ -1,0 +1,38 @@
+name: Python Tests
+
+on:
+  push:
+    branches:
+      - production
+  pull_request:
+    branches:
+      - production
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check the repository code
+      uses: actions/checkout@v3
+
+    - name: Set up Python 3.9 environment
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Install dependencies
+      run: |
+        python -m venv venv
+        source venv/bin/activate
+        pip install -r requirements.txt
+
+    - name: Run the unit tests
+      run: |
+        source venv/bin/activate
+        pytest tests/unit
+
+    - name: Run the integration tests
+      run: |
+        source venv/bin/activate
+        pytest tests/integration
