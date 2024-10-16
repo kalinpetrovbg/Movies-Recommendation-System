@@ -1,11 +1,12 @@
 from fastapi import APIRouter, HTTPException, Request
 from starlette.responses import HTMLResponse
 
+from app.database.movies_data import MovieData
 from app.dependencies import (
     collaborative_data,
     content_data,
     priority_data,
-    templates,
+    templates, movies_csv,
 )
 
 router = APIRouter()
@@ -15,6 +16,11 @@ router = APIRouter()
 async def home(request: Request):
     return templates.TemplateResponse("home.html", {"request": request})
 
+@router.get("/movie/{movie_id}", response_class=HTMLResponse, include_in_schema=False)
+async def get_single_movie(request: Request, movie_id: int):
+    movie_data = movies_csv.get_single_movie(movie_id)
+    return templates.TemplateResponse(
+        "movie.html", {"request": request, "movie_data": movie_data})
 
 @router.get("/popularity", response_class=HTMLResponse, include_in_schema=False)
 async def popularity(request: Request):
